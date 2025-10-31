@@ -98,14 +98,4 @@ The PowerShell source code in this repository is proprietary and may not be redi
 
 ---
 
-## 📸 Example (Optional)
-
-If you plan to show command output or GUI interaction, include an example screenshot here:
-
-```markdown
-![Script Output Example](assets/screenshots/update-run-example.png)
-```
-
----
-
 *Developed to simplify routine maintenance and ensure consistency across AllStaff systems.*
