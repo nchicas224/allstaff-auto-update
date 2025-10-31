@@ -1,29 +1,35 @@
 # 🧩 AllStaff Auto Update
 
 ![PowerShell](https://img.shields.io/badge/Language-PowerShell-blue)
-![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey)
+![Microsoft 365](https://img.shields.io/badge/Platform-Microsoft%20365-0078D4)
+![Automation](https://img.shields.io/badge/Type-Automation-green)
 ![License](https://img.shields.io/badge/License-All%20Rights%20Reserved-red)
 
-A PowerShell automation script designed to streamline the process of performing system-wide updates for AllStaff environments.
+An automated PowerShell solution for Microsoft 365 administrators to keep their **All Staff distribution list** up to date without manual intervention.
 
 ---
 
 ## 📦 Overview
 
-The **AllStaff Auto Update** script automates the process of checking, downloading, and applying updates across multiple Windows systems or shared environments.  
-It ensures consistent patching, logging, and version control across your organization's machines.
+The **AllStaff Auto Update** script ensures your organization's “All Staff” distribution list always reflects your current, actively licensed employees.
 
-This tool is ideal for IT administrators who need to keep all staff computers synchronized and up to date without manual intervention.
+It works by:
+- Querying your tenant’s licensed users
+- Adding new hires to the All Staff distribution list automatically
+- Removing terminated or unlicensed users
+- Running on a scheduled interval (e.g., Task Scheduler, Azure Automation, or Function App timer)
+
+This helps organizations maintain accurate communication lists for internal announcements, HR notices, and company-wide messaging.
 
 ---
 
 ## 🧰 Features
 
-- 🔄 Automated Windows updates and software version checks  
-- 📋 Centralized logging of update results  
-- 🧠 Smart retry logic for failed updates  
-- ⚙️ Optional parameters for silent or interactive modes  
-- 🔐 Runs with administrative permissions when required  
+- 🔄 Automatically adds newly licensed users to the All Staff distribution list  
+- ❌ Removes users who no longer hold any active Microsoft 365 licenses  
+- 🕐 Supports automation via Task Scheduler, Azure Automation, or any timer-based trigger  
+- 📋 Generates optional output logs for auditing updates  
+- ⚙️ Designed to run unattended once configured  
 
 ---
 
@@ -31,62 +37,76 @@ This tool is ideal for IT administrators who need to keep all staff computers sy
 
 ```
 allstaff-auto-update/
-└── auto-update-script.ps1     # Main PowerShell script
+└── auto-update-script.ps1     # Main PowerShell automation script
 ```
 
 ---
 
-## ⚙️ Usage
+## ⚙️ Setup & Configuration
 
-### 1️⃣ Prerequisites
-- Windows 10 or later  
-- PowerShell 5.1+ (recommended)  
-- Administrative privileges (if updating protected software)
+### 🧰 Prerequisites
 
-### 2️⃣ Run the Script
-Open **PowerShell as Administrator** and execute:
+- **PowerShell 5.1+** or **PowerShell 7+**
+- **Microsoft Graph PowerShell SDK**
+  ```powershell
+  Install-Module Microsoft.Graph -Scope AllUsers
+  ```
+- Sufficient permissions to read user objects and manage distribution lists (typically part of the M365 admin team).
+
+---
+
+## 🚀 Running the Script
+
+Run the script locally or through any automation platform that supports PowerShell:
 
 ```powershell
 Set-ExecutionPolicy RemoteSigned -Scope Process -Force
 .uto-update-script.ps1
 ```
 
-If your script resides in a subfolder, navigate to it first:
+### 🕐 Schedule It (Recommended)
 
-```powershell
-cd allstaff-auto-update
-.uto-update-script.ps1
-```
+#### ⏰ Windows Task Scheduler
+1. Open Task Scheduler → *Create Basic Task*  
+2. Set your desired interval (e.g., daily at 3 AM)  
+3. Action → *Start a program*  
+   ```
+   powershell.exe -File "C:\Scripts\auto-update-script.ps1"
+   ```
 
----
-
-## 🧩 Parameters
-
-If your script includes parameters (example):
-
-| Parameter | Description | Example |
-|------------|-------------|----------|
-| `-Silent` | Runs updates without prompts | `.uto-update-script.ps1 -Silent` |
-| `-LogPath` | Specifies custom log file location | `.uto-update-script.ps1 -LogPath "C:\Logs\AllStaffUpdate.log"` |
-
-*(Update this table if your script supports other parameters.)*
+#### ☁️ Azure Automation
+- Create a PowerShell Runbook  
+- Upload the script  
+- Link it to a **Timer Trigger** (e.g., every 24 hours)
 
 ---
 
-## 🧾 Logging
+## 🧾 Logging (Optional)
 
-The script can be configured to log results to:
+You can configure the script to write logs to:
 ```
-C:\ProgramData\AllStaff\Logs\update-log.txt
+C:\ProgramData\AllStaff\Logs\sync-log.txt
 ```
-or a user-defined path via `-LogPath`.
+Each run can record:
+- Added users
+- Removed users
+- Total users synced
+- Timestamps and success/failure status
+
+---
+
+## ⚠️ Notes
+
+- This script only targets **static distribution lists**. It does **not** modify dynamic groups.  
+- All changes occur using standard Microsoft Graph user and group management APIs.  
+- You can safely re-run the script — it performs **idempotent** updates (only changes necessary members).
 
 ---
 
 ## 🧑‍💻 Contributing
 
-This repository is closed-source and not accepting external contributions.  
-However, forks may be created for personal or internal organizational use.
+This project is closed-source and not accepting public contributions.  
+Forks may be used for personal or internal administrative automation.
 
 ---
 
@@ -94,8 +114,8 @@ However, forks may be created for personal or internal organizational use.
 
 **All Rights Reserved © 2025 Nelson Chicas**
 
-The PowerShell source code in this repository is proprietary and may not be redistributed, modified, or used commercially without written consent.
+The PowerShell source code in this repository is proprietary and may not be redistributed, modified, or used commercially without written permission.
 
 ---
 
-*Developed to simplify routine maintenance and ensure consistency across AllStaff systems.*
+*Developed for Microsoft 365 administrators to maintain accurate All Staff distribution lists automatically.*
